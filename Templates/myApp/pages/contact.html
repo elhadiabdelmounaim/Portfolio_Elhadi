@@ -131,13 +131,9 @@
 
                         <div class="form-group">
                             <label for="subject">Sujet *</label>
-                            <select id="subject" name="subject" required>
-                                <option value="">Choisissez le sujet</option>
-                                <option value="info" {% if form.subject.value == 'info' %}selected{% endif %}>Demande d'information</option>
-                                <option value="inscription" {% if form.subject.value == 'inscription' %}selected{% endif %}>Inscription aux cours</option>
-                                <option value="tarifs" {% if form.subject.value == 'tarifs' %}selected{% endif %}>Tarifs</option>
-                                <option value="autre" {% if form.subject.value == 'autre' %}selected{% endif %}>Autre sujet</option>
-                            </select>
+                            <input type="text" id="subject" name="subject" maxlength="160" required
+                                placeholder="Saisissez le sujet de votre message"
+                                value="{{ form.subject.value|default:'' }}">
                             <span class="error-message">{{ form.subject.errors|join:", " }}</span>
                         </div>
 

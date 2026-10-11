@@ -205,25 +205,23 @@ class SetupTests(TestCase):
         self.assertEqual(Contact.objects.count(), 0)
         self.assertContains(response, 'Vous devez accepter')
 
-    def test_contact_no_longer_collects_school_levels(self):
+    def test_contact_subject_is_free_text_and_does_not_collect_school_levels(self):
         response = self.client.get('/contact')
         self.assertNotContains(response, 'Niveau scolaire')
         self.assertNotContains(response, 'name="niveau"')
         self.assertNotContains(response, 'value="college"')
         self.assertNotContains(response, 'value="lycee"')
+        self.assertContains(response, 'type="text" id="subject" name="subject"')
+        self.assertNotContains(response, '<select id="subject"')
         payload = {
             'first_name': 'Contact', 'last_name': 'Test',
-            'email': 'contact@example.com', 'subject': 'info',
+            'email': 'contact@example.com', 'subject': 'Question about my CV and portfolio',
             'message': 'General inquiry.', 'consent': 'on',
             'niveau': '2bac',
         }
         response = self.client.post('/contact', payload)
         self.assertRedirects(response, '/contact')
-        self.assertIsNone(Contact.objects.get().niveau)
-
-        for subject in ['college', 'lycee']:
-            with self.subTest(subject=subject):
-                response = self.client.post('/contact', {**payload, 'subject': subject})
-                self.assertEqual(response.status_code, 200)
-                self.assertIn('subject', response.context['form'].errors)
+        contact = Contact.objects.get()
+        self.assertIsNone(contact.niveau)
+        self.assertEqual(contact.subject, 'Question about my CV and portfolio')
         self.assertEqual(Contact.objects.count(), 1)

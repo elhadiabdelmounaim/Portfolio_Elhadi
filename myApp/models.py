@@ -73,16 +73,6 @@ class CVItem(models.Model):
         return self.title
 
 class Contact(models.Model):
-
-    SUJET_CHOICES = [
-        ('info', "Demande d'information"),
-        ('inscription', 'Inscription aux cours'),
-        ('college', 'Cours niveau Collège'),
-        ('lycee', 'Cours niveau Lycée'),
-        ('tarifs', 'Tarifs'),
-        ('autre', 'Autre sujet'),
-    ]
-
     NIVEAU_CHOICES = [
         ('1app', '1ère Année Collège'),
         ('2app', '2ème Année Collège'),
@@ -97,10 +87,7 @@ class Contact(models.Model):
     email      = models.EmailField()
     phone      = models.CharField(max_length=20, blank=True, null=True)
 
-    subject = models.CharField(
-        max_length=20,
-        choices=SUJET_CHOICES
-    )
+    subject = models.CharField(max_length=160)
 
     niveau = models.CharField(
         max_length=10,

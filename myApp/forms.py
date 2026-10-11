@@ -74,13 +74,6 @@ class ContactForm(forms.ModelForm):
             'subject', 'message', 'consent',
         ]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['subject'].choices = [
-            choice for choice in self.fields['subject'].choices
-            if choice[0] not in {'college', 'lycee'}
-        ]
-
     # ── Validation personnalisée ──────────────────────────────────────────────
 
     def clean_consent(self):

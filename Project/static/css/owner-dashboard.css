@@ -55,7 +55,7 @@ h2 { letter-spacing: -.025em; }
 .section-card { min-height: 180px; padding: 19px; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: 15px; box-shadow: 0 5px 17px #29314c08; transition: transform .16s, box-shadow .16s; }
 .section-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
 .section-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-.section-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 11px; background: #f1f0ff; font-size: 18px; }
+.section-icon { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 11px; background: #f1f0ff; font-size: 20px; }
 .section-card h3 { margin: 0 0 3px; font-size: 16px; }
 .section-card p { margin-bottom: 15px; font-size: 12px; }
 .card-link { margin-top: auto; display: flex; justify-content: space-between; color: var(--brand); font-size: 12px; font-weight: 750; }
@@ -65,6 +65,7 @@ h2 { letter-spacing: -.025em; }
 .breadcrumbs a { color: var(--brand); font-weight: 650; }
 .section-intro { align-items: center; }
 .section-intro h1 { font-size: clamp(25px, 4vw, 32px); }
+.section-title-icon { font-size: 1.08em; }
 .button-row, .item-actions, .form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .item-list { display: grid; gap: 12px; }
 .item-card { padding: 19px 20px; display: flex; gap: 22px; justify-content: space-between; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 14px; }

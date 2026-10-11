@@ -108,10 +108,14 @@ def dashboard_profile_edit(request):
 @owner_required
 def dashboard_section(request, key):
     section = get_object_or_404(CVSection, key=key)
+    sections = list(CVSection.objects.all())
+    section_index = sections.index(section)
     items = section.items.all()
     return render(request, "myApp/dashboard/section.html", {
         "section": section,
         "items": items,
+        "previous_section": sections[section_index - 1] if section_index > 0 else None,
+        "next_section": sections[section_index + 1] if section_index + 1 < len(sections) else None,
     })
 
 

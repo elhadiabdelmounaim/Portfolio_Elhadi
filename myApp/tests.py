@@ -123,6 +123,21 @@ class SetupTests(TestCase):
         self.client.force_login(user)
         self.assertEqual(self.client.get(reverse("dashboard_home")).status_code, 403)
 
+    def test_section_page_has_return_and_adjacent_section_navigation(self):
+        owner = get_user_model().objects.create_superuser(
+            username="owner", email="owner@example.com", password="test-password"
+        )
+        self.client.force_login(owner)
+        sections = list(CVSection.objects.all())
+        section = sections[1]
+        response = self.client.get(reverse("dashboard_section", args=[section.key]))
+
+        self.assertContains(response, "Back to sections")
+        self.assertContains(response, "Previous section")
+        self.assertContains(response, "Next section")
+        self.assertEqual(response.context["previous_section"], sections[0])
+        self.assertEqual(response.context["next_section"], sections[2])
+
     def test_owner_can_add_edit_and_delete_cv_items(self):
         owner = get_user_model().objects.create_superuser(
             username="owner", email="owner@example.com", password="test-password"

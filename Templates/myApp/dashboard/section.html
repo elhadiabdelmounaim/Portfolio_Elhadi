@@ -5,10 +5,17 @@
 <section class="dash-intro section-intro">
     <div>
         <p class="eyebrow">CV SECTION</p>
-        <h1>{{ section.icon }} {{ section.title }}</h1>
+        <h1><span class="section-title-icon" aria-hidden="true">{{ section.icon }}</span> {{ section.title }}</h1>
         <p class="muted">{% if section.is_visible %}This section is visible on your public CV.{% else %}This section is hidden from public visitors.{% endif %}</p>
     </div>
     <div class="button-row">
+        <a class="button button-secondary" href="{% url 'dashboard_home' %}">← Back to sections</a>
+        {% if previous_section %}
+        <a class="button button-secondary" href="{% url 'dashboard_section' previous_section.key %}">← Previous section</a>
+        {% endif %}
+        {% if next_section %}
+        <a class="button button-secondary" href="{% url 'dashboard_section' next_section.key %}">Next section →</a>
+        {% endif %}
         <a class="button button-secondary" href="{% url 'dashboard_section_edit' section.key %}">Section settings</a>
         <a class="button button-primary" href="{% url 'dashboard_item_create' section.key %}">＋ Add item</a>
     </div>

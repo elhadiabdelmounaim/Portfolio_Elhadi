@@ -48,7 +48,10 @@ class SetupTests(TestCase):
         response = self.client.post(login_url, {
             "username": "visitor", "password": "test-password",
         })
-        self.assertContains(response, "The username or password was not accepted.")
+        self.assertContains(
+            response,
+            "Sign-in failed. Enter the username and password for a project Superuser account.",
+        )
         self.assertNotIn("_auth_user_id", self.client.session)
 
         owner = get_user_model().objects.create_superuser(
@@ -58,6 +61,41 @@ class SetupTests(TestCase):
             "username": owner.username, "password": "test-password",
         })
         self.assertRedirects(response, reverse("dashboard_home"))
+
+    def test_both_admin_pages_are_distinguished_and_share_owner_login(self):
+        dashboard_login = self.client.get(reverse("dashboard_login"))
+        self.assertContains(dashboard_login, "Django Admin manages contact messages and records")
+        self.assertContains(dashboard_login, reverse("admin:index"))
+
+        admin_login = self.client.get(reverse("admin:login"))
+        self.assertContains(admin_login, "CV Studio dashboard · CV content")
+        self.assertContains(admin_login, reverse("dashboard_login"))
+
+        owner = get_user_model().objects.create_superuser(
+            username="owner", email="owner@example.com", password="test-password"
+        )
+        admin_index_client = Client()
+        admin_index_client.force_login(owner)
+        self.assertContains(
+            admin_index_client.get(reverse("admin:index")),
+            "Manage CV records and contact messages",
+        )
+
+        dashboard_client = Client()
+        self.assertRedirects(
+            dashboard_client.post(reverse("dashboard_login"), {
+                "username": owner.username, "password": "test-password",
+            }),
+            reverse("dashboard_home"),
+        )
+        django_admin_client = Client()
+        self.assertRedirects(
+            django_admin_client.post(reverse("admin:login"), {
+                "username": owner.username, "password": "test-password",
+                "next": reverse("admin:index"),
+            }),
+            reverse("admin:index"),
+        )
 
     def test_removed_home_page_returns_not_found(self):
         self.assertEqual(self.client.get('/home').status_code, 404)

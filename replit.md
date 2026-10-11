@@ -21,8 +21,10 @@ value in source code.
 
 - `/`: public CV/portfolio
 - `/contact`: contact form
-- `/dashboard/login/`: owner dashboard login
-- `/admin/`: Django admin
+- `/dashboard/login/`: CV Studio dashboard for editing the public profile, sections, and entries. Requires a project Superuser.
+- `/admin/`: Django Admin for contact messages and lower-level CV records. It uses the same project accounts.
+
+The two admin pages are separate interfaces, not separate accounts. Use the Django Superuser username and password on either sign-in page. The CV Studio dashboard only allows Superusers; Django Admin also checks Django's staff permissions.
 
 Dashboard and admin access require an existing authorized account. To create a
 new owner account if needed, run `python manage.py createsuperuser` interactively;

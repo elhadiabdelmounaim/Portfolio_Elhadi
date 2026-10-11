@@ -11,6 +11,7 @@
     <header class="dash-header">
         <a class="dash-brand" href="{% url 'dashboard_home' %}"><span class="brand-mark">CV</span><span>CV Studio<small>Private dashboard</small></span></a>
         <nav class="dash-nav">
+            <a href="{% url 'admin:index' %}">Django Admin · Messages &amp; records</a>
             <a href="{% url 'root' %}" target="_blank" rel="noopener">View public CV ↗</a>
             <form method="post" action="{% url 'dashboard_logout' %}">
                 {% csrf_token %}

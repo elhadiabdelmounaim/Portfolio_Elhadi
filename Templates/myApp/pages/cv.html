@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - {{ profile.name|default:"AI & Big Data Engineer" }}</title>
+    <link rel="stylesheet" href="{% static 'css/css/cv.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">AI &amp; Data Portfolio</div>
+            <ul class="nav-menu">
+                <li><a href="{% url 'root' %}" class="active">CV</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+            </ul>
+            <div class="hamburger"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <header class="cv-header">
+        <div class="profile-section">
+            <div class="profile-image">
+                <div class="avatar"><img src="{% static 'img/img/prof.jpeg' %}" alt="{{ profile.name }}" id="prof"></div>
+            </div>
+            <h1 class="profile-name">{{ profile.name }}</h1>
+            <p class="profile-title">{{ profile.headline }}</p>
+            <div class="contact-info">
+                {% if profile.email %}
+                <div class="info-item"><span class="icon">📧</span><a href="mailto:{{ profile.email }}">{{ profile.email }}</a></div>
+                {% endif %}
+                {% if profile.phone %}
+                <div class="info-item"><span class="icon">📱</span><a href="tel:{{ profile.phone }}">{{ profile.phone }}</a></div>
+                {% endif %}
+                {% if profile.location %}
+                <div class="info-item"><span class="icon">📍</span><span>{{ profile.location }}</span></div>
+                {% endif %}
+                <div class="info-item"><span class="icon">💼</span>{% if profile.linkedin_url %}<a href="{{ profile.linkedin_url }}" target="_blank" rel="noopener">LinkedIn</a>{% else %}<span>LinkedIn</span>{% endif %}</div>
+                <div class="info-item"><span class="icon">💻</span>{% if profile.github_url %}<a href="{{ profile.github_url }}" target="_blank" rel="noopener">GitHub</a>{% else %}<span>GitHub</span>{% endif %}</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="cv-content">
+        <div class="cv-container">
+            {% for section in sections %}
+                {% if section.key == "about" %}
+                <section class="cv-section">
+                    <h2 class="section-title"><span class="title-icon">{{ section.icon }}</span>{{ section.title }}</h2>
+                    <div class="section-content">
+                        {% for item in section.visible_items %}{% if item.title != "About Me" %}<h3>{{ item.title }}</h3>{% endif %}<p class="about-text">{{ item.description|linebreaksbr }}</p>{% endfor %}
+                    </div>
+                </section>
+                {% elif section.key == "education" %}
+                <section class="cv-section">
+                    <h2 class="section-title"><span class="title-icon">{{ section.icon }}</span>{{ section.title }}</h2>
+                    <div class="section-content"><div class="timeline">
+                        {% for item in section.visible_items %}
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content">
+                            <h3>{{ item.title }}</h3>
+                            {% if item.subtitle %}<span class="timeline-date">{{ item.subtitle }}</span>{% endif %}
+                            {% if item.detail_lines %}<ul class="experience-list">{% for line in item.detail_lines %}<li>{{ line }}</li>{% endfor %}</ul>{% endif %}
+                            {% if item.description %}<p>{{ item.description|linebreaksbr }}</p>{% endif %}
+                        </div></div>
+                        {% endfor %}
+                    </div></div>
+                </section>
+                {% elif section.key == "skills" %}
+                <section class="cv-section">
+                    <h2 class="section-title"><span class="title-icon">{{ section.icon }}</span>{{ section.title }}</h2>
+                    <div class="section-content"><div class="skills-grid">
+                        {% for group in section.skill_groups %}
+                        <div class="skill-category">
+                            <h3>{{ group.name }}</h3>
+                            {% for item in group.items %}
+                            <div class="skill-item">
+                                <span>{{ item.title }}</span>
+                                <div class="skill-bar"><div class="skill-progress" style="width: {{ item.proficiency }}%"></div></div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div></div>
+                </section>
+                {% elif section.key == "projects" %}
+                <section class="cv-section">
+                    <h2 class="section-title"><span class="title-icon">{{ section.icon }}</span>{{ section.title }}</h2>
+                    <div class="section-content"><div class="education-grid">
+                        {% for item in section.visible_items %}
+                        <div class="education-item">
+                            <div class="education-icon">{{ item.icon|default:"🚀" }}</div>
+                            <h3>{{ item.title }}</h3>
+                            {% if item.subtitle %}<p class="institution">{{ item.subtitle }}</p>{% endif %}
+                            {% if item.detail_lines %}<ul class="experience-list" style="text-align: left; margin-top: 1rem;">{% for line in item.detail_lines %}<li>{{ line }}</li>{% endfor %}</ul>{% endif %}
+                            {% if item.description %}<p>{{ item.description|linebreaksbr }}</p>{% endif %}
+                        </div>
+                        {% endfor %}
+                    </div></div>
+                </section>
+                {% elif section.key == "tools" or section.key == "languages" %}
+                <section class="cv-section">
+                    <h2 class="section-title"><span class="title-icon">{{ section.icon }}</span>{{ section.title }}</h2>
+                    <div class="section-content"><div class="languages-grid">
+                        {% for item in section.visible_items %}
+                        <div class="language-item">
+                            <div class="language-name">{{ item.title }}</div>
+                            <div class="language-level">{{ item.subtitle }}</div>
+                            <div class="language-dots">{% for filled in item.rating_dots %}<span class="dot{% if filled %} filled{% endif %}"></span>{% endfor %}</div>
+                            {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                        </div>
+                        {% endfor %}
+                    </div></div>
+                </section>
+                {% elif section.key == "certifications" %}
+                <section class="cv-section">
+                    <h2 class="section-title"><span class="title-icon">{{ section.icon }}</span>{{ section.title }}</h2>
+                    <div class="section-content"><div class="certifications-list">
+                        {% for item in section.visible_items %}
+                        <div class="cert-item"><div class="cert-icon">{{ item.icon|default:"✓" }}</div><div class="cert-details">
+                            <h3>{{ item.title }}</h3>{% if item.subtitle %}<p>{{ item.subtitle }}</p>{% endif %}
+                            {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                        </div></div>
+                        {% endfor %}
+                    </div></div>
+                </section>
+                {% elif section.key == "soft_skills" %}
+                <section class="cv-section">
+                    <h2 class="section-title"><span class="title-icon">{{ section.icon }}</span>{{ section.title }}</h2>
+                    <div class="section-content"><div class="education-grid">
+                        {% for item in section.visible_items %}
+                        <div class="cert-item"><div class="cert-icon">{{ item.icon|default:"💡" }}</div><div class="cert-details">
+                            <h3>{{ item.title }}</h3>{% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                        </div></div>
+                        {% endfor %}
+                    </div></div>
+                </section>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer class="footer"><p>&copy; 2024 AI &amp; Data Science Portfolio. All rights reserved.</p></footer>
+    <script src="{% static 'js/js/cv.js' %}"></script>
+</body>
+</html>

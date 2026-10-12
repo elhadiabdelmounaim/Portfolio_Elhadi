@@ -36,7 +36,7 @@ class SetupTests(TestCase):
         for path in ["/", "/cv", "/contact"]:
             with self.subTest(path=path):
                 response = self.client.get(path)
-                self.assertContains(response, ">CV</a>")
+                self.assertContains(response, ">Portfolio</a>")
                 self.assertContains(response, ">Contact</a>")
                 self.assertNotContains(response, ">Home</a>")
                 self.assertNotContains(response, "/dashboard/login/")
